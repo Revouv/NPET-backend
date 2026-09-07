@@ -1,4 +1,5 @@
-"""Roteador principal da API.
+"""
+Roteador principal da API.
 
 Agrega os routers de todos os módulos/domínios. É incluído em `app.main`
 sob o prefixo definido em `settings.API_PREFIX` (ex.: `/api/v1`).
@@ -7,9 +8,11 @@ sob o prefixo definido em `settings.API_PREFIX` (ex.: `/api/v1`).
 from fastapi import APIRouter
 
 from app.health.router import router as health_router
-from app.modules.auth.router import router as auth_router
+from app.modules.auth.usuarios.router import router as auth_router
+from app.modules.auth.instituicoes.router import router as institutions_auth_router
 
 api_router = APIRouter()
 
 api_router.include_router(health_router)
 api_router.include_router(auth_router)
+api_router.include_router(institutions_auth_router)

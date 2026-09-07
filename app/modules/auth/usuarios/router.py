@@ -6,9 +6,9 @@ Só cuida de HTTP: recebe o DTO já validado pelo schema, chama o Service e devo
 
 from fastapi import APIRouter, Depends
 
-from app.modules.auth.repository import AuthRepository, get_auth_repository
-from app.modules.auth.schemas import LoginRequest, LoginResponse
-from app.modules.auth.service import AuthService
+from app.modules.auth.usuarios.repository import AuthRepository, get_auth_repository
+from app.modules.auth.usuarios.schemas import LoginRequest, LoginResponse
+from app.modules.auth.usuarios.service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

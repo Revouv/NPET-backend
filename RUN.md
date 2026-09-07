@@ -8,14 +8,11 @@ Pré-requisito: **Python 3.10+** (testado com 3.11.9).
 # criar
 python -m venv .venv
 
-# ativar (Windows - PowerShell)
+# ativar (Windows, PowerShell)
 .venv\Scripts\Activate.ps1
 
-# ativar (Windows - CMD)
+# ativar (Windows, CMD)
 .venv\Scripts\activate.bat
-
-# ativar (Linux / Mac)
-source .venv/bin/activate
 ```
 
 > Se o PowerShell recusar rodar `Activate.ps1` (erro de "execution policy"),
@@ -32,7 +29,6 @@ pip install -r requirements.txt
 ## 3. Configurar variáveis de ambiente:
 
 ```bash
-# Windows
 copy .env.example .env
 ```
 
@@ -52,10 +48,24 @@ A API sobe em `http://localhost:8000`.
 
 ## 6. Testar o login:
 
-Credencial hardcoded (ver [app/modules/auth/fake_db.py](app/modules/auth/fake_db.py)):
+### Como usuário:
+
+Credencial hardcoded (ver [app/modules/auth/usuarios/fake_db.py](app/modules/auth/usuarios/fake_db.py)):
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d "{\"email\": \"admin@npet.org\", \"password\": \"npet123\"}"
 ```
+
+### Como instituição:
+
+Credencial hardcoded (ver [app/modules/auth/instituicoes/fake_db.py](app/modules/auth/instituicoes/fake_db.py)):
+
+```bash
+curl -X POST http://localhost:8000/api/v1/institutions/auth/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\": \"contato@email.com.br\", \"password\": \"senha123\"}"
+```
+
+Nos dois casos: credencial certa → `200` com `{"success": true, "message": "Autenticação realizada com sucesso."}`; credencial errada → `401`.

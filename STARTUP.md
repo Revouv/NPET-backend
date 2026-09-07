@@ -16,15 +16,19 @@ HTTP → Router (Controller) → Service (regra) → Repository (dados) → "ban
        router.py             service.py        repository.py
 ```
 
-- **Router** ([app/modules/auth/router.py](app/modules/auth/router.py)): expõe `POST /auth/login`. Só cuida de HTTP. Recebe o DTO já validado, chama o Service, devolve a resposta.
+O módulo `auth/` tem dois percursos **idênticos**, um por tipo de quem
+autentica: `usuarios/` (`POST /auth/login`) e `instituicoes/`
+(`POST /institutions/auth/login`). Ambos têm as mesmas camadas:
 
-- **Schema** ([app/modules/auth/schemas.py](app/modules/auth/schemas.py)): `LoginRequest` valida o formato das credenciais de entrada (e-mail válido, senha não vazia) antes de qualquer regra de negócio rodar. `LoginResponse` é o formato de saída.
+- **Router** ([usuarios/router.py](app/modules/auth/usuarios/router.py) · [instituicoes/router.py](app/modules/auth/instituicoes/router.py)): expõe o `POST .../login`. Só cuida de HTTP. Recebe o DTO já validado, chama o Service, devolve a resposta.
 
-- **Service** ([app/modules/auth/service.py](app/modules/auth/service.py)): a regra de negócio. Pergunta ao Repository se a credencial existe e bate a senha. Não conhece HTTP nem sabe onde os dados estão guardados. Lança `UnauthorizedError` se a autenticação falhar.
+- **Schema** ([usuarios/schemas.py](app/modules/auth/usuarios/schemas.py) · [instituicoes/schemas.py](app/modules/auth/instituicoes/schemas.py)): `LoginRequest` valida o formato das credenciais de entrada (e-mail válido, senha não vazia) antes de qualquer regra de negócio rodar. `LoginResponse` é o formato de saída.
 
-- **Repository** ([app/modules/auth/repository.py](app/modules/auth/repository.py)): a única camada que sabe *onde* os dados moram. Hoje consulta uma lista hardcoded; quando o banco entrar, só este arquivo muda.
+- **Service** ([usuarios/service.py](app/modules/auth/usuarios/service.py) · [instituicoes/service.py](app/modules/auth/instituicoes/service.py)): a regra de negócio. Pergunta ao Repository se a credencial existe e bate a senha. Não conhece HTTP nem sabe onde os dados estão guardados. Lança `UnauthorizedError` se a autenticação falhar.
 
-- **"Banco" fake** ([app/modules/auth/fake_db.py](app/modules/auth/fake_db.py)): um arquivo com uma lista Python simulando a tabela de credenciais. A credencial de teste é `admin@npet.org` / `ablubluble`.
+- **Repository** ([usuarios/repository.py](app/modules/auth/usuarios/repository.py) · [instituicoes/repository.py](app/modules/auth/instituicoes/repository.py)): a única camada que sabe *onde* os dados moram. Hoje consulta uma lista hardcoded; quando o banco entrar, só este arquivo muda.
+
+- **"Banco" fake** ([usuarios/fake_db.py](app/modules/auth/usuarios/fake_db.py) · [instituicoes/fake_db.py](app/modules/auth/instituicoes/fake_db.py)): um arquivo com uma lista Python simulando a tabela de credenciais. Credenciais de teste: usuário `admin@npet.org` / `npet123`; instituição `contato@ufnpet.edu.br` / `npet123`.
 
 ## 2. Estrutura de diretórios:
 
@@ -42,11 +46,18 @@ HTTP → Router (Controller) → Service (regra) → Repository (dados) → "ban
 ¦ │   │   └── router.py            # GET /health                                ¦
 ¦ │   └── modules/                                                              ¦
 ¦ │       └── auth/                                                             ¦
-¦ │           ├── fake_db.py       # credencial hardcoded ("banco" simulado)    ¦
-¦ │           ├── repository.py    # consulta o fake_db                         ¦
-¦ │           ├── schemas.py       # LoginRequest / LoginResponse               ¦
-¦ │           ├── service.py       # regra de autenticação                      ¦
-¦ │           └── router.py        # POST /auth/login                           ¦
+¦ │           ├── usuarios/        # POST /auth/login                           ¦
+¦ │           │   ├── fake_db.py       # credencial hardcoded (usuário)         ¦
+¦ │           │   ├── repository.py    # consulta o fake_db                     ¦
+¦ │           │   ├── schemas.py       # LoginRequest / LoginResponse           ¦
+¦ │           │   ├── service.py       # regra de autenticação                  ¦
+¦ │           │   └── router.py        # rotas HTTP                             ¦
+¦ │           └── instituicoes/    # POST /institutions/auth/login              ¦
+¦ │               ├── fake_db.py       # credencial hardcoded (instituição)     ¦
+¦ │               ├── repository.py    # consulta o fake_db                     ¦
+¦ │               ├── schemas.py       # LoginRequest / LoginResponse           ¦
+¦ │               ├── service.py       # regra de autenticação                  ¦
+¦ │               └── router.py        # rotas HTTP                             ¦
 ¦ ├── .env.example                 # modelo de variáveis de ambiente            ¦
 ¦ ├── .gitignore                                                                ¦
 ¦ ├── requirements.txt                                                          ¦
@@ -57,10 +68,20 @@ HTTP → Router (Controller) → Service (regra) → Repository (dados) → "ban
 
 ## 3. Testando o fluxo
 
+Como **usuário**:
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -d "{\"email\": \"admin@npet.org\", \"password\": \"npet123\"}"
+```
+
+Como **instituição** (mesmo contrato, outra rota):
+
+```bash
+curl -X POST http://localhost:8000/api/v1/institutions/auth/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\": \"contato@email.com.br\", \"password\": \"senha123\"}"
 ```
 
 - Credencial certa → `200` com `{"success": true, "message": "Autenticação realizada com sucesso."}`.
