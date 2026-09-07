@@ -1,4 +1,4 @@
-from app.modules.institutions.fake_db import FAKE_INSTITUTION_CREDENTIALS_DB
+from app.modules.auth.instituicoes.fake_db import FAKE_INSTITUTION_CREDENTIALS_DB
 
 
 class InstitutionAuthRepository:

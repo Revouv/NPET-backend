@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends
 
-from app.modules.institutions.repository import (
+from app.modules.auth.instituicoes.repository import (
     InstitutionAuthRepository,
     get_institution_auth_repository,
 )
-from app.modules.institutions.schemas import (
+from app.modules.auth.instituicoes.schemas import (
     InstitutionLoginRequest,
     InstitutionLoginResponse,
 )
-from app.modules.institutions.service import InstitutionAuthService
+from app.modules.auth.instituicoes.service import InstitutionAuthService
 
 router = APIRouter(prefix="/institutions/auth", tags=["institutions-auth"])
 
