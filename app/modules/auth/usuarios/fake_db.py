@@ -6,5 +6,5 @@ Quando o banco entrar de verdade, este arquivo é apagado e o Repository passa a
 """
 
 FAKE_CREDENTIALS_DB: list[dict[str, str]] = [
-    {"email": "admin@npet.org", "password": "npet123"},
+    {"email": "doador@email.com.br", "password": "senha123"},
 ]

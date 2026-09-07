@@ -1,3 +1,3 @@
 FAKE_INSTITUTION_CREDENTIALS_DB: list[dict[str, str]] = [
-    {"email": "contato@email.com.br", "password": "senha123"},
+    {"email": "instituicao@email.com.br", "password": "senha123"},
 ]
