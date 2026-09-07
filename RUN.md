@@ -55,7 +55,7 @@ Credencial hardcoded (ver [app/modules/auth/usuarios/fake_db.py](app/modules/aut
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"email\": \"admin@npet.org\", \"password\": \"npet123\"}"
+  -d "{\"email\": \"doador@email.com.br\", \"password\": \"senha123\"}"
 ```
 
 ### Como instituição:
@@ -65,7 +65,7 @@ Credencial hardcoded (ver [app/modules/auth/instituicoes/fake_db.py](app/modules
 ```bash
 curl -X POST http://localhost:8000/api/v1/institutions/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"email\": \"contato@email.com.br\", \"password\": \"senha123\"}"
+  -d "{\"email\": \"instituicao@email.com.br\", \"password\": \"senha123\"}"
 ```
 
 Nos dois casos: credencial certa → `200` com `{"success": true, "message": "Autenticação realizada com sucesso."}`; credencial errada → `401`.

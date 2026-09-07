@@ -73,7 +73,7 @@ Como **usuário**:
 ```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"email\": \"admin@npet.org\", \"password\": \"npet123\"}"
+  -d "{\"email\": \"doador@email.com.br\", \"password\": \"senha123\"}"
 ```
 
 Como **instituição** (mesmo contrato, outra rota):
@@ -81,7 +81,7 @@ Como **instituição** (mesmo contrato, outra rota):
 ```bash
 curl -X POST http://localhost:8000/api/v1/institutions/auth/login \
   -H "Content-Type: application/json" \
-  -d "{\"email\": \"contato@email.com.br\", \"password\": \"senha123\"}"
+  -d "{\"email\": \"instituicao@email.com.br\", \"password\": \"senha123\"}"
 ```
 
 - Credencial certa → `200` com `{"success": true, "message": "Autenticação realizada com sucesso."}`.
